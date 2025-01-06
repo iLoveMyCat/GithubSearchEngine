@@ -1,0 +1,79 @@
+# Visual Studio
+.vscode/
+.vs/
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+*.log
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+*.iml
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# ASP.NET Core specific
+appsettings*.json
+appsettings*.Development.json
+
+# Publish output
+publish/
+*.publishsettings
+
+# NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Entity Framework
+*.edmx.diagram
+*.edmx.sql
+*.edmx
+*.designer.cs
+
+# Angular specific (inside ClientApp)
+ClientApp/node_modules/
+ClientApp/dist/
+ClientApp/build/
+
+# Angular environment files (if any sensitive configurations are used)
+ClientApp/src/environments/*.ts
+!ClientApp/src/environments/environment.prod.ts
+
+# Logs and temporary files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
