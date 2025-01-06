@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubSearchAPI", "GithubSearchAPI\GithubSearchAPI.csproj", "{02AF53A3-1343-47B6-8AD2-C770D31C09EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02AF53A3-1343-47B6-8AD2-C770D31C09EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02AF53A3-1343-47B6-8AD2-C770D31C09EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02AF53A3-1343-47B6-8AD2-C770D31C09EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02AF53A3-1343-47B6-8AD2-C770D31C09EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98B4A719-3CAE-4697-B5AA-ABD2674607A4}
+	EndGlobalSection
+EndGlobal
