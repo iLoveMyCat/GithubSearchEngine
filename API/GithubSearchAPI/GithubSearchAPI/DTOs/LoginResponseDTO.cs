@@ -1,8 +1,9 @@
 ﻿namespace GithubSearchAPI.DTOs
 {
-    public class LoginRequestDTO
+    public class LoginResponseDTO
     {
+        public string Token { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; }
+
     }
 }

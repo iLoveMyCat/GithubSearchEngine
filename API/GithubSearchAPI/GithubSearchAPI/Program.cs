@@ -1,3 +1,6 @@
+using GithubSearchAPI.Repositoreis;
+using GithubSearchAPI.Services;
+
 namespace GithubSearchAPI
 {
     public class Program
@@ -6,9 +9,27 @@ namespace GithubSearchAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // CORS configuration
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin", builder =>
+                {
+                    builder.WithOrigins("https://localhost:4200", "http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowCredentials() // for secured cookies
+                .AllowAnyMethod();
+                });
+
+            });
+
+            // Configure Services
+            builder.Services.AddSingleton<IAuthService, AuthService>();
+            builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
 
             builder.Services.AddControllers();
+
+
+            //swagger
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -24,7 +45,9 @@ namespace GithubSearchAPI
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("AllowSpecificOrigin");
+
+            //app.UseAuthorization();
 
 
             app.MapControllers();
