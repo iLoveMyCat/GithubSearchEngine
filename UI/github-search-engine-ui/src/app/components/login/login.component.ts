@@ -18,9 +18,9 @@ export class LoginComponent {
 
   login(event: Event): void {
     debugger;
-    console.log('Username:', this.username); // Debugging
-    console.log('Password:', this.password); // Debugging
-
+    console.log('Username:', this.username); 
+    console.log('Password:', this.password); 
+    
     event.preventDefault();
     this.authService.login(this.username, this.password).subscribe({
       next: () => {

@@ -37,10 +37,16 @@ export class AuthService {
   }
 
   logout(): void {
-    // I considered to still make the username null(logout in UI) even if we fail to get OK response from the server.
-    this.http.post(`${this.apiUrl}/logout`, {}).subscribe(() => {
-      this.clearState();
-    });
+    // debugger;
+    // this.http
+    //   .post(`${this.apiUrl}/TestAuthorize`, {}, { withCredentials: true })
+    //   .subscribe((resp) => {
+    //     console.log(resp);
+    //   });
+    this.http
+      .post(`${this.apiUrl}/logout`, {}, { withCredentials: true })
+      .subscribe(() => {});
+    this.clearState();
   }
 
   clearState() {
