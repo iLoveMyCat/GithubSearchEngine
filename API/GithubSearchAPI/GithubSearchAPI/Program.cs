@@ -1,5 +1,7 @@
 using GithubSearchAPI.Repositoreis;
 using GithubSearchAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GithubSearchAPI
 {
@@ -16,11 +18,37 @@ namespace GithubSearchAPI
                 {
                     builder.WithOrigins("https://localhost:4200", "http://localhost:4200")
                 .AllowAnyHeader()
-                .AllowCredentials() // for secured cookies
+                .AllowCredentials()
                 .AllowAnyMethod();
                 });
 
             });
+
+
+            // Configure JWT Authentication
+            var key = Convert.FromBase64String(builder.Configuration["Jwt:SecretKey"]);
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateLifetime = true,
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            // Extract token from the secured cookie
+                            context.Token = context.HttpContext.Request.Cookies["auth-token"];
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
 
             // Configure Services
             builder.Services.AddSingleton<IAuthService, AuthService>();
@@ -47,7 +75,9 @@ namespace GithubSearchAPI
 
             app.UseCors("AllowSpecificOrigin");
 
-            //app.UseAuthorization();
+
+            app.UseAuthentication(); 
+            app.UseAuthorization();
 
 
             app.MapControllers();

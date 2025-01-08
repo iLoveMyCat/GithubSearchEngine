@@ -26,12 +26,12 @@ namespace GithubSearchAPI.Controllers
                 return Unauthorized(new { message = "invalid credentials" });
             }
 
-            //I would call it differently in production something not obvious like Authcookie
+            //I would call the key differently in production something not obvious like "auth-token"
             Response.Cookies.Append("auth-token", response.Token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None, // change to strict for production.
                 Expires = DateTimeOffset.UtcNow.AddHours(1)
             });
 
@@ -43,11 +43,20 @@ namespace GithubSearchAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Logout()
         {
-            // preferablly add a token blacklist - delete cookie -> add token to blacklist -> remove expired tokens. and move it to the service
+            // preferablly add a token blacklist - delete cookie -> add token to blacklist -> remove expired tokens. and move implementation to the service layer
             Response.Cookies.Delete("auth-token");
             return Ok(new { messsage = "Succefully logged out" });
         }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult TestAuthroize()
+        {
+            return Ok(new { messsage = "You are authorized" });
+        }
+
     }
 }
