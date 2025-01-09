@@ -21,40 +21,63 @@ namespace GithubSearchAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery] string query)
         {
-            if (string.IsNullOrWhiteSpace(query))
-                return BadRequest(new { message = "Query cannot be empty" });
+            try
+            {
+                if (string.IsNullOrWhiteSpace(query))
+                    return BadRequest(new { message = "Query cannot be empty" });
 
-            var results = await _gitHubService.SearchRepositoriesAsync(query);
-            return Ok(results);
+                var results = await _gitHubService.SearchRepositoriesAsync(query);
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while processing the request.", details = ex.Message });
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> AddToFavorites([FromBody] FavoriteDTO favorite)
         {
-            if (favorite == null || string.IsNullOrWhiteSpace(favorite.RepositoryName) || string.IsNullOrWhiteSpace(favorite.RepositoryUrl))
+            try
             {
-                return BadRequest(new { message = "Invalid favorite data" });
-            }
 
-            var userId = GetUserId();
-            if (userId == null)
+                if (favorite == null || string.IsNullOrWhiteSpace(favorite.RepositoryName) || string.IsNullOrWhiteSpace(favorite.RepositoryUrl))
+                {
+                    return BadRequest(new { message = "Invalid favorite data" });
+                }
+
+                var userId = GetUserId();
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+
+                await _gitHubService.AddToFavoritesAsync(favorite, userId.Value);
+                return Ok(new { message = "Favorite added successfully" });
+            }
+            catch (Exception ex)
             {
-                return Unauthorized();
+                return StatusCode(500, new { message = "An error occurred while adding to favorites.", details = ex.Message });
             }
-
-            await _gitHubService.AddToFavoritesAsync(favorite, userId.Value);
-            return Ok(new { message = "Favorite added successfully" });
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFavorites()
         {
-            var userId = GetUserId();
-            if (userId == null)
-                return Unauthorized();
+            try
+            {
 
-            var favorites = await _gitHubService.GetFavoritesAsync(userId.Value);
-            return Ok(favorites);
+                var userId = GetUserId();
+                if (userId == null)
+                    return Unauthorized();
+
+                var favorites = await _gitHubService.GetFavoritesAsync(userId.Value);
+                return Ok(favorites);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while fetching favorites.", details = ex.Message });
+            }
         }
 
 

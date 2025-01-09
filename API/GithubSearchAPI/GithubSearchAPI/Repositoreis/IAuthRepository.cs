@@ -4,6 +4,7 @@ namespace GithubSearchAPI.Repositoreis
 {
     public interface IAuthRepository
     {
-        Task<User> ValidateUserAsync(string username, string hashedPassword); 
+        Task<User?> GetUserByUsernameAsync(string username);
+        Task<int> CreateUserAsync(string username, string hashedPassword);
     }
 }

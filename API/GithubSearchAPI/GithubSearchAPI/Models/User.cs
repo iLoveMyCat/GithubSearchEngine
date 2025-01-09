@@ -2,8 +2,8 @@
 {
     public class User
     {
-        public int Id { get; set; } //could make it UID
+        public int Id { get; set; } 
         public string Username { get; set; }
-        public string hashedPassowrd { get; set; } 
+        public string HashedPassword { get; set; } 
     }
 }

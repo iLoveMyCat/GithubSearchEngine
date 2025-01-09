@@ -2,6 +2,7 @@
 using GithubSearchAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 
 namespace GithubSearchAPI.Controllers
 {
@@ -52,11 +53,26 @@ namespace GithubSearchAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        public IActionResult TestAuthroize()
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDTO request)
         {
-            return Ok(new { messsage = "You are authorized" });
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Message = "Invalid input data." });
+            }
+
+            try
+            {
+                var userId = await _authService.RegisterUserAsync(request.Username, request.Password);
+                return Ok(new { Message = "User registered successfully.", UserId = userId });
+            }
+            catch (Exception ex)
+            {
+                // Log unexpected error
+                return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+            }
         }
+
 
     }
 }

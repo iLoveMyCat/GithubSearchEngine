@@ -13,9 +13,9 @@ namespace GithubSearchAPI.Services
         private readonly IGithubRepository _githubRepository;
 
         public GithubService(HttpClient httpClient, IConfiguration configuration, IGithubRepository githubRepository)
-        {   
+        {
             _httpClient = httpClient;
-            _configuration= configuration;
+            _configuration = configuration;
             _githubRepository = githubRepository;
         }
 
@@ -77,6 +77,8 @@ namespace GithubSearchAPI.Services
         {
             return await _githubRepository.GetFavoritesAsync(userId);
         }
+
+
 
     }
 }
