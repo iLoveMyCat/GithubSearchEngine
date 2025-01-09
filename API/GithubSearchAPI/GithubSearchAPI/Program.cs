@@ -50,9 +50,12 @@ namespace GithubSearchAPI
                     };
                 });
 
+            builder.Services.AddHttpClient();
+
             // Configure Services
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
+            builder.Services.AddSingleton<IGithubService, GithubService>();
 
             builder.Services.AddControllers();
 
