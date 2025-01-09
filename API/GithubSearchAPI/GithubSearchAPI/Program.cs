@@ -1,3 +1,4 @@
+using GithubSearchAPI.DATA.MIGRATIONS;
 using GithubSearchAPI.Repositoreis;
 using GithubSearchAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,6 +11,18 @@ namespace GithubSearchAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // // Connection string to master database
+            // var connectionString = builder.Configuration.GetConnectionString("MasterConnection");
+
+            // // Run database migration
+            // string migrationScriptPath = Path.Combine(AppContext.BaseDirectory, "Data", "Migrations", "SetupDatabase.sql");
+            // Console.WriteLine("Enter a secure password for the database login:");
+            // string password = Console.ReadLine();
+
+            // var migrationExecutor = new MigrationExecutor(connectionString);
+            // migrationExecutor.RunMigration(migrationScriptPath, password);
+
 
             // CORS configuration
             builder.Services.AddCors(options =>
@@ -76,16 +89,10 @@ namespace GithubSearchAPI
             }
 
             app.UseHttpsRedirection();
-
             app.UseCors("AllowSpecificOrigin");
-
-
             app.UseAuthentication(); 
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
