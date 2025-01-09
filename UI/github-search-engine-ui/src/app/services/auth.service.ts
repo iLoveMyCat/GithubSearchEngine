@@ -37,16 +37,18 @@ export class AuthService {
   }
 
   logout(): void {
-    // debugger;
-    // this.http
-    //   .post(`${this.apiUrl}/TestAuthorize`, {}, { withCredentials: true })
-    //   .subscribe((resp) => {
-    //     console.log(resp);
-    //   });
     this.http
       .post(`${this.baseUrl}/logout`, {}, { withCredentials: true })
       .subscribe(() => {});
     this.clearState();
+  }
+
+  register(username: string, password: string): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/register`,
+      { username, password },
+      { withCredentials: true }
+    );
   }
 
   clearState() {

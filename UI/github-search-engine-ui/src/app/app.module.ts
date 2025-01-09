@@ -13,6 +13,7 @@ import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/shared/nav/nav.component';
 import { SearchInputComponent } from './components/search-input/search-input.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { FavoritesComponent } from './components/favorites/favorites.component';
     NavComponent,
     SearchInputComponent,
     FavoritesComponent,
+    RegisterComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [AuthGuard],

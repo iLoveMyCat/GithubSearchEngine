@@ -72,12 +72,10 @@ namespace GithubSearchAPI.Repositoreis
             }
             catch (SqlException ex)
             {
-                // Log and rethrow with specific message
                 throw new Exception("Error retrieving favorites from the database.", ex);
             }
             catch (Exception ex)
             {
-                // Log and rethrow general exceptions
                 throw new Exception("An unexpected error occurred while fetching favorites.", ex);
             }
             return favorites;

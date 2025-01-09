@@ -16,6 +16,7 @@
     <button *ngIf="!isLoggedIn()" (click)="login()" style="margin-right: 5px">
       Login
     </button>
+    <button (click)="register()" style="margin-right: 5px">Register</button>
     <button *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
   </span>
 </nav>
