@@ -1,5 +1,6 @@
 ﻿using GithubSearchAPI.DTOs;
 using GithubSearchAPI.Models;
+using GithubSearchAPI.Repositoreis;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -9,12 +10,13 @@ namespace GithubSearchAPI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
+        private readonly IGithubRepository _githubRepository;
 
-
-        public GithubService(HttpClient httpClient, IConfiguration configuration)
+        public GithubService(HttpClient httpClient, IConfiguration configuration, IGithubRepository githubRepository)
         {   
             _httpClient = httpClient;
             _configuration= configuration;
+            _githubRepository = githubRepository;
         }
 
         public async Task<IEnumerable<SearchResultDTO>> SearchRepositoriesAsync(string query)
@@ -59,6 +61,21 @@ namespace GithubSearchAPI.Services
             {
                 throw new ApplicationException("failed processing the gitHub api request.", ex);
             }
+        }
+
+        public async Task AddToFavoritesAsync(FavoriteDTO favorite, int userId)
+        {
+            if (favorite == null || userId <= 0)
+            {
+                throw new ArgumentException("Invalid data provided.");
+            }
+
+            await _githubRepository.AddFavoriteAsync(favorite, userId);
+        }
+
+        public async Task<IEnumerable<FavoriteDTO>> GetFavoritesAsync(int userId)
+        {
+            return await _githubRepository.GetFavoritesAsync(userId);
         }
 
     }

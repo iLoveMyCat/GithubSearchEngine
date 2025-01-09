@@ -2,6 +2,7 @@
 using GithubSearchAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace GithubSearchAPI.Controllers
 {
@@ -27,16 +28,47 @@ namespace GithubSearchAPI.Controllers
             return Ok(results);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddToFavorites([FromBody] FavoriteDTO favorite)
-        //{
-        //    return Ok();
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AddToFavorites([FromBody] FavoriteDTO favorite)
+        {
+            if (favorite == null || string.IsNullOrWhiteSpace(favorite.RepositoryName) || string.IsNullOrWhiteSpace(favorite.RepositoryUrl))
+            {
+                return BadRequest(new { message = "Invalid favorite data" });
+            }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetFavorites()
-        //{
-        //    return Ok();
-        //}
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            await _gitHubService.AddToFavoritesAsync(favorite, userId.Value);
+            return Ok(new { message = "Favorite added successfully" });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFavorites()
+        {
+            var userId = GetUserId();
+            if (userId == null)
+                return Unauthorized();
+
+            var favorites = await _gitHubService.GetFavoritesAsync(userId.Value);
+            return Ok(favorites);
+        }
+
+
+
+        protected int? GetUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (int.TryParse(userIdClaim, out int userId))
+            {
+                return userId;
+            }
+            return null;
+        }
     }
+
+
 }

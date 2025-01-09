@@ -27,7 +27,7 @@ namespace GithubSearchAPI.Services
 
             if (user == null) return null;
 
-            var token = GenerateJwtToken(user.Username);
+            var token = GenerateJwtToken(user.Username, user.Id);
 
             return new LoginResponseDTO {
                 Token = token,
@@ -41,16 +41,19 @@ namespace GithubSearchAPI.Services
             throw new NotImplementedException();
         }
 
-        private string GenerateJwtToken(string username)
+        private string GenerateJwtToken(string username, int userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Convert.FromBase64String(_configuration["Jwt:SecretKey"]);
 
-
+            var claims = new[] { 
+                new Claim(ClaimTypes.Name, username), 
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()) 
+            };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

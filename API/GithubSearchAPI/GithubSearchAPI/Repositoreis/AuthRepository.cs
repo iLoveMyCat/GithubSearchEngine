@@ -14,7 +14,7 @@ namespace GithubSearchAPI.Repositoreis
 
         public AuthRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("connection-string");
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         //    CREATE PROCEDURE stp_validateUser
@@ -28,19 +28,18 @@ namespace GithubSearchAPI.Repositoreis
         //    END
         public async Task<User> ValidateUserAsync(string username, string hashedPassword)
         {
-            // mock untill we set the db.
-            if(username == "user13" )
-            {
-                return new User
-                {
-                    Id = 13,
-                    Username = "user13"
-                };
-            }
-            else
-            {
-                return null;
-            }
+            //if(username == "user13" )
+            //{
+            //    return new User
+            //    {
+            //        Id = 13,
+            //        Username = "user13"
+            //    };
+            //}
+            //else
+            //{
+            //    return null;
+            //}
 
             using var connection = new SqlConnection(_connectionString);
             using var command = new SqlCommand("stp_validateUser", connection)

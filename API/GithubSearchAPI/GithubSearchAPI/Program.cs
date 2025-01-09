@@ -56,6 +56,7 @@ namespace GithubSearchAPI
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
             builder.Services.AddSingleton<IGithubService, GithubService>();
+            builder.Services.AddSingleton<IGithubRepository, GithubRepository>();
 
             builder.Services.AddControllers();
 
