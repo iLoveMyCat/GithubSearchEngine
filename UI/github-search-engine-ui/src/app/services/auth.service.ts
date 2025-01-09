@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = `${environment.apiUrl}/auth`;
+  private baseUrl = `${environment.apiUrl}/auth`;
   private usernameSubject = new BehaviorSubject<string | null>(
     localStorage.getItem('username')
   );
@@ -22,7 +22,7 @@ export class AuthService {
   login(username: string, password: string): Observable<any> {
     return this.http
       .post<any>(
-        `${this.apiUrl}/login`,
+        `${this.baseUrl}/login`,
         { username, password },
         { withCredentials: true }
       )
@@ -44,7 +44,7 @@ export class AuthService {
     //     console.log(resp);
     //   });
     this.http
-      .post(`${this.apiUrl}/logout`, {}, { withCredentials: true })
+      .post(`${this.baseUrl}/logout`, {}, { withCredentials: true })
       .subscribe(() => {});
     this.clearState();
   }

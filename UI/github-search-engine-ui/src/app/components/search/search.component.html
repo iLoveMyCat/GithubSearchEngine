@@ -1,1 +1,27 @@
-<p>search works!</p>
+<div>
+  <input
+    type="text"
+    [(ngModel)]="searchQuery"
+    placeholder="search"
+    (keyup.enter)="onSearch()"
+  />
+  <button (click)="onSearch()">Search</button>
+</div>
+
+<div *ngIf="searchResults.length > 0">
+  <h3>Search Results</h3>
+  <ul>
+    <li *ngFor="let result of searchResults">
+      <div>
+        <a [href]="result.repositoryUrl" target="_blank">{{
+          result.repositoryName
+        }}</a>
+        <p>{{ result.description }}</p>
+        <button (click)="addToFavorites(result)">Add to Favorites</button>
+      </div>
+    </li>
+  </ul>
+</div>
+<div *ngIf="searchResults.length === 0 && searchDone">
+  <p>No results found for "{{ searchQuery }}"</p>
+</div>

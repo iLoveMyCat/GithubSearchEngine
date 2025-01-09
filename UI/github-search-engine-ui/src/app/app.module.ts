@@ -15,7 +15,16 @@ import { SearchInputComponent } from './components/search-input/search-input.com
 import { FavoritesComponent } from './components/favorites/favorites.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, SearchComponent, SearchResultsComponent, HomeComponent, NavComponent, SearchInputComponent, FavoritesComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    SearchComponent,
+    SearchResultsComponent,
+    HomeComponent,
+    NavComponent,
+    SearchInputComponent,
+    FavoritesComponent,
+  ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
