@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { GithubService } from '../../services/github.service';
 import { SearchResult } from '../../interfaces/search-result';
+import { Favorite } from '../../interfaces/favorite.interface';
 
 @Component({
   selector: 'app-search',
@@ -29,6 +30,18 @@ export class SearchComponent {
   }
 
   addToFavorites(repository: SearchResult): void {
-    alert(`Added repository ${repository.repositoryName} to favorites`);
+    const favorite: Favorite = {
+      repositoryName: repository.repositoryName,
+      repositoryUrl: repository.repositoryUrl,
+    };
+
+    this.githubService.addToFavorites(favorite).subscribe({
+      next: (response) => {
+        debugger;
+        this.favorites.push(repository); // add locally
+        console.log(response.message);
+      },
+      error: (err) => console.error('Failed to add favorite', err),
+    });
   }
 }

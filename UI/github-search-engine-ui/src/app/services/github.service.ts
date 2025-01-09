@@ -19,8 +19,16 @@ export class GithubService {
     });
   }
 
-  addToFavorites(repo: Favorite): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/add-to-favorites`, repo, {
+  addToFavorites(favorite: Favorite): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.baseUrl}/AddToFavorites`,
+      favorite,
+      { withCredentials: true }
+    );
+  }
+
+  getFavorites(): Observable<Favorite[]> {
+    return this.http.get<Favorite[]>(`${this.baseUrl}/GetFavorites`, {
       withCredentials: true,
     });
   }
