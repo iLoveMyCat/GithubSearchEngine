@@ -73,6 +73,7 @@ namespace GithubSearchAPI
 
             builder.Services.AddControllers();
 
+            builder.Services.AddMemoryCache();
 
             //swagger
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,6 +1,7 @@
 ﻿using GithubSearchAPI.DTOs;
 using GithubSearchAPI.Models;
 using GithubSearchAPI.Repositoreis;
+using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -11,17 +12,26 @@ namespace GithubSearchAPI.Services
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IGithubRepository _githubRepository;
+        private readonly IMemoryCache _cache;
 
-        public GithubService(HttpClient httpClient, IConfiguration configuration, IGithubRepository githubRepository)
+        public GithubService(HttpClient httpClient, IConfiguration configuration, IGithubRepository githubRepository, IMemoryCache cache)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _githubRepository = githubRepository;
+            _cache = cache;
         }
 
         public async Task<IEnumerable<SearchResultDTO>> SearchRepositoriesAsync(string query, int? limit = null)
         {
-            var perPage = limit.HasValue ? limit.Value : 30;
+            var cacheKey = $"Search_{query}_{limit ?? 30}";
+
+            if (_cache.TryGetValue(cacheKey, out IEnumerable<SearchResultDTO> cachedResults))
+            {
+                return cachedResults;  
+            }
+
+            var perPage = limit ?? 30;
             var requestUrl = $"https://api.github.com/search/repositories?q={query}&per_page={perPage}";
 
             try
@@ -51,12 +61,21 @@ namespace GithubSearchAPI.Services
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
 
-                return githubResponse?.Items.Select(repo => new SearchResultDTO
+                var results = githubResponse?.Items.Select(repo => new SearchResultDTO
                 {
                     RepositoryName = repo.Name,
                     RepositoryUrl = repo.HtmlUrl,
                     Description = repo.Description
                 }) ?? Enumerable.Empty<SearchResultDTO>();
+
+                // cache expiration of 5 minutes
+                _cache.Set(cacheKey, results, new MemoryCacheEntryOptions
+                {
+                    SlidingExpiration = TimeSpan.FromMinutes(5),
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15)
+                });
+
+                return results;
             }
             catch (Exception ex)
             {
