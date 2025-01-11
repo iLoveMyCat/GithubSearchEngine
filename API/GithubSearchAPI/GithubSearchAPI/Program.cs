@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using GithubSearchAPI.DATA.MIGRATIONS;
 using GithubSearchAPI.Repositoreis;
 using GithubSearchAPI.Services;
@@ -75,6 +76,27 @@ namespace GithubSearchAPI
 
             builder.Services.AddMemoryCache();
 
+            // Simple rate limit configuration
+            builder.Services.Configure<IpRateLimitOptions>(options =>
+            {
+                options.EnableEndpointRateLimiting = true;   
+                options.StackBlockedRequests = false;       
+                options.HttpStatusCode = 429;              
+                options.GeneralRules = new List<RateLimitRule>
+                {
+                    new RateLimitRule
+                    {
+                        Endpoint = "*:/github/search",       
+                        Period = "15s",                      
+                        Limit = 5                         
+                    }
+                };
+                    });
+
+            // Required for rate limiting to work
+            builder.Services.AddInMemoryRateLimiting();
+            builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
             //swagger
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -91,7 +113,8 @@ namespace GithubSearchAPI
 
             app.UseHttpsRedirection();
             app.UseCors("AllowSpecificOrigin");
-            app.UseAuthentication(); 
+            app.UseIpRateLimiting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
             app.Run();
