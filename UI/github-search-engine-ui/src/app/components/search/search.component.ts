@@ -3,6 +3,7 @@ import { GithubService } from '../../services/github.service';
 import { SearchResult } from '../../interfaces/search-result';
 import { Favorite } from '../../interfaces/favorite.interface';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-search',
@@ -16,7 +17,13 @@ export class SearchComponent {
   searchDone: boolean = false;
   private searchSubject = new Subject<string>();
 
-  constructor(private githubService: GithubService) {
+  errorMessage: string = '';
+  isRateLimited: boolean = false;
+
+  constructor(
+    private githubService: GithubService,
+    private errorHandler: ErrorHandlerService
+  ) {
     // Handle real-time suggestions
     this.searchSubject
       .pipe(
@@ -38,9 +45,15 @@ export class SearchComponent {
         next: (results) => {
           this.searchResults = results;
           this.searchDone = true;
-          this.suggestions = []; // Clear suggestions after full search
+          this.suggestions = [];
         },
-        error: (err) => console.error(err),
+        error: (err) =>
+          this.errorHandler.handleError(
+            err,
+            (msg) => (this.errorMessage = msg),
+            () =>
+              (this.isRateLimited = this.errorHandler.isCurrentlyRateLimited())
+          ),
       });
     }
   }
@@ -70,7 +83,13 @@ export class SearchComponent {
         alert('Favorite added successfully');
         console.log(response.message);
       },
-      error: (err) => console.error('Failed to add favorite', err),
+      error: (err) =>
+        this.errorHandler.handleError(
+          err,
+          (msg) => (this.errorMessage = msg),
+          () =>
+            (this.isRateLimited = this.errorHandler.isCurrentlyRateLimited())
+        ),
     });
   }
 }

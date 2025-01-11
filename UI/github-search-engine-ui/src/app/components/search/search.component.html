@@ -37,3 +37,7 @@
 <div *ngIf="searchResults.length === 0 && searchDone" class="no-results">
   <p>No results found for "{{ searchQuery }}"</p>
 </div>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>

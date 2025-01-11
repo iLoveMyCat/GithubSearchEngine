@@ -33,6 +33,12 @@
   background-color: #2ea043;
 }
 
+button[disabled],
+input[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .results-container {
   margin-top: 20px;
   max-width: 800px;
@@ -123,4 +129,15 @@
 
 .dropdown li:last-child {
   border-bottom: none;
+}
+
+.error-message {
+  background-color: #ffe6e6;
+  color: #cc0000;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #ffcccc;
 }
