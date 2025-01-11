@@ -8,10 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthGuard } from './guards/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { SearchComponent } from './components/search/search.component';
-import { SearchResultsComponent } from './components/search-results/search-results.component';
-import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/shared/nav/nav.component';
-import { SearchInputComponent } from './components/search-input/search-input.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
 import { RegisterComponent } from './components/register/register.component';
 
@@ -20,10 +17,7 @@ import { RegisterComponent } from './components/register/register.component';
     AppComponent,
     LoginComponent,
     SearchComponent,
-    SearchResultsComponent,
-    HomeComponent,
     NavComponent,
-    SearchInputComponent,
     FavoritesComponent,
     RegisterComponent,
   ],

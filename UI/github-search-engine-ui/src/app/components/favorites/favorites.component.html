@@ -1,10 +1,18 @@
-<div>
+<div class="favorites-container">
   <h2>Your Favorites</h2>
-  <ul>
-    <li *ngFor="let favorite of favorites">
-      <a [href]="favorite.repositoryUrl" target="_blank">{{
-        favorite.repositoryName
-      }}</a>
+
+  <ul *ngIf="favorites.length > 0">
+    <li *ngFor="let favorite of favorites" class="favorite-item">
+      <div class="favorite-card">
+        <a [href]="favorite.repositoryUrl" target="_blank">
+          {{ favorite.repositoryName }}
+        </a>
+        <button (click)="removeFromFavorites(favorite)">Remove</button>
+      </div>
     </li>
   </ul>
+
+  <div *ngIf="favorites.length === 0" class="empty-state">
+    <p>You have no favorites yet.</p>
+  </div>
 </div>

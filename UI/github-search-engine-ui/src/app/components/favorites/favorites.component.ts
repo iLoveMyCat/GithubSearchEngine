@@ -12,6 +12,14 @@ export class FavoritesComponent {
 
   constructor(private githubService: GithubService) {}
 
+  removeFromFavorites(repo: any) {
+    this.favorites = this.favorites.filter((fav) => fav !== repo);
+    alert(
+      'TODO: add a service and an endpoint (not specified in the exercise)'
+    );
+    // TODO: add a service and an endpoint (not specified in the exercise) ***
+  }
+
   ngOnInit(): void {
     this.githubService.getFavorites().subscribe({
       next: (favorites) => (this.favorites = favorites),

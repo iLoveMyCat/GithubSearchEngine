@@ -1,29 +1,37 @@
-<div>
+<div class="login-container">
   <form (submit)="login($event)">
     <h2>Login</h2>
-    <div>
+
+    <div class="form-group">
       <label for="username">Username</label>
       <input
         type="text"
         id="username"
         name="username"
         [(ngModel)]="username"
+        placeholder="Enter your username"
         required
-        placeholder="username"
       />
     </div>
-    <div>
+
+    <div class="form-group">
       <label for="password">Password</label>
       <input
         type="password"
         id="password"
         name="password"
         [(ngModel)]="password"
+        placeholder="your password"
         required
-        placeholder="password"
       />
     </div>
+
     <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
     <button type="submit">Login</button>
+
+    <p class="register-link">
+      New here? <a routerLink="/register">Create an account</a>
+    </p>
   </form>
 </div>

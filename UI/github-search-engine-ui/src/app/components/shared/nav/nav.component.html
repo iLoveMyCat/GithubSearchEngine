@@ -1,22 +1,12 @@
-<nav
-  style="
-    padding: 10px;
-    background-color: #f4f4f4;
-    border-bottom: 1px solid #ccc;
-    min-height: 18px;
-  "
->
-  <a routerLink="/search" style="margin-right: 15px" *ngIf="isLoggedIn()"
-    >Search</a
-  >
-  <a routerLink="/favorites" style="margin-right: 15px" *ngIf="isLoggedIn()"
-    >Favorites</a
-  >
-  <span style="float: right">
-    <button *ngIf="!isLoggedIn()" (click)="login()" style="margin-right: 5px">
-      Login
-    </button>
-    <button (click)="register()" style="margin-right: 5px">Register</button>
+<nav class="navbar">
+  <div class="nav-left">
+    <a routerLink="/search" *ngIf="isLoggedIn()">Search</a>
+    <a routerLink="/favorites" *ngIf="isLoggedIn()">Favorites</a>
+  </div>
+
+  <div class="nav-right">
+    <a *ngIf="!isLoggedIn()" routerLink="/login">Login</a>
+    <a *ngIf="!isLoggedIn()" routerLink="/register">Register</a>
     <button *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
-  </span>
+  </div>
 </nav>
