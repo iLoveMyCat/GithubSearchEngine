@@ -13,10 +13,14 @@ export class GithubService {
 
   constructor(private http: HttpClient) {}
 
-  searchRepositories(query: string): Observable<SearchResult[]> {
-    return this.http.get<any>(`${this.baseUrl}/search?query=${query}`, {
-      withCredentials: true,
-    });
+  searchRepositories(
+    query: string,
+    limit?: number
+  ): Observable<SearchResult[]> {
+    const url = limit
+      ? `${this.baseUrl}/search?query=${query}&limit=${limit}`
+      : `${this.baseUrl}/search?query=${query}`;
+    return this.http.get<SearchResult[]>(url, { withCredentials: true });
   }
 
   addToFavorites(favorite: Favorite): Observable<{ message: string }> {

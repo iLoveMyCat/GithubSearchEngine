@@ -1,10 +1,21 @@
 <div class="search-container">
-  <input
-    type="text"
-    [(ngModel)]="searchQuery"
-    placeholder="Search repositories..."
-    (keyup.enter)="onSearch()"
-  />
+  <div class="search-wrapper">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      placeholder="Search repositories..."
+      (input)="onInputChange(searchQuery)"
+      (keyup.enter)="onSearch()"
+    />
+    <ul *ngIf="suggestions.length > 0" class="dropdown">
+      <li
+        *ngFor="let suggestion of suggestions"
+        (click)="selectSuggestion(suggestion)"
+      >
+        {{ suggestion.repositoryName }}
+      </li>
+    </ul>
+  </div>
   <button (click)="onSearch()">Search</button>
 </div>
 
