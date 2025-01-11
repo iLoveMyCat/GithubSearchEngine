@@ -6,8 +6,9 @@
       placeholder="Search repositories..."
       (input)="onInputChange(searchQuery)"
       (keyup.enter)="onSearch()"
+      (focus)="toggleSuggestions(true)"
     />
-    <ul *ngIf="suggestions.length > 0" class="dropdown">
+    <ul *ngIf="suggestions.length > 0 && showSuggestions" class="dropdown">
       <li
         *ngFor="let suggestion of suggestions"
         (click)="selectSuggestion(suggestion)"

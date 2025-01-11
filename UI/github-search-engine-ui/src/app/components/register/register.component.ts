@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { SpinnerService } from '../../services/spinner.service';
 
 @Component({
   selector: 'app-register',
@@ -11,16 +12,21 @@ export class RegisterComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private spinnerService: SpinnerService
+  ) {}
 
   register(event: Event): void {
     event.preventDefault();
-    debugger;
+    this.spinnerService.show();
     this.authService.register(this.username, this.password).subscribe({
       next: () => {
+        this.spinnerService.hide();
         alert('User registered successfully!');
       },
       error: (err) => {
+        this.spinnerService.hide();
         this.errorMessage = err.error?.Message || 'An error occurred.';
       },
     });

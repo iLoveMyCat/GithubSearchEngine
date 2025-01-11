@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Favorite } from '../../interfaces/favorite.interface';
 import { GithubService } from '../../services/github.service';
+import { SpinnerService } from '../../services/spinner.service';
 
 @Component({
   selector: 'app-favorites',
@@ -10,7 +11,10 @@ import { GithubService } from '../../services/github.service';
 export class FavoritesComponent {
   favorites: Favorite[] = [];
 
-  constructor(private githubService: GithubService) {}
+  constructor(
+    private githubService: GithubService,
+    private spinnerService: SpinnerService
+  ) {}
 
   removeFromFavorites(repo: any) {
     this.favorites = this.favorites.filter((fav) => fav !== repo);
@@ -21,9 +25,16 @@ export class FavoritesComponent {
   }
 
   ngOnInit(): void {
+    this.spinnerService.show();
     this.githubService.getFavorites().subscribe({
-      next: (favorites) => (this.favorites = favorites),
-      error: (err) => console.error('Failed to load favorites', err),
+      next: (favorites) => {
+        this.spinnerService.hide();
+        this.favorites = favorites;
+      },
+      error: (err) => {
+        this.spinnerService.hide();
+        console.error('Failed to load favorites', err);
+      },
     });
   }
 }
