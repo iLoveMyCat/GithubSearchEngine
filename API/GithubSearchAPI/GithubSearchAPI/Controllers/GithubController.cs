@@ -19,14 +19,14 @@ namespace GithubSearchAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Search([FromQuery] string query)
+        public async Task<IActionResult> Search([FromQuery] string query, [FromQuery] int? limit = null)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(query))
                     return BadRequest(new { message = "Query cannot be empty" });
 
-                var results = await _gitHubService.SearchRepositoriesAsync(query);
+                var results = await _gitHubService.SearchRepositoriesAsync(query, limit);
                 return Ok(results);
             }
             catch (Exception ex)

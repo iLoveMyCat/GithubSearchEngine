@@ -5,7 +5,7 @@ namespace GithubSearchAPI.Services
 {
     public interface IGithubService
     {
-        Task<IEnumerable<SearchResultDTO>> SearchRepositoriesAsync(string query);
+        Task<IEnumerable<SearchResultDTO>> SearchRepositoriesAsync(string query, int? limit);
         Task AddToFavoritesAsync(FavoriteDTO favorite, int userId);
         Task<IEnumerable<FavoriteDTO>> GetFavoritesAsync(int userId);
 

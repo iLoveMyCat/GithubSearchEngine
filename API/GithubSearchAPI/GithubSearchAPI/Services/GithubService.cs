@@ -19,9 +19,10 @@ namespace GithubSearchAPI.Services
             _githubRepository = githubRepository;
         }
 
-        public async Task<IEnumerable<SearchResultDTO>> SearchRepositoriesAsync(string query)
+        public async Task<IEnumerable<SearchResultDTO>> SearchRepositoriesAsync(string query, int? limit = null)
         {
-            var requestUrl = $"https://api.github.com/search/repositories?q={query}";
+            var perPage = limit.HasValue ? limit.Value : 30;
+            var requestUrl = $"https://api.github.com/search/repositories?q={query}&per_page={perPage}";
 
             try
             {
