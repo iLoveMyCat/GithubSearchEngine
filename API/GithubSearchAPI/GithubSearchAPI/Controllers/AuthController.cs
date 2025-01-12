@@ -16,6 +16,45 @@ namespace GithubSearchAPI.Controllers
             _authService = authService;
         }
 
+        [HttpGet]
+        public IActionResult Session()
+        {
+            var user = HttpContext.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                return Ok(new
+                {
+                    isAuthenticated = true,
+                    username = user.Identity.Name
+                });
+            }
+
+            return Unauthorized(new { isAuthenticated = false });
+        }
+
+        // for future refresh token mechanism
+        //[HttpPost] 
+        //public IActionResult RefreshToken()
+        //{
+        //    var refreshToken = Request.Cookies["refresh-token"];
+        //    if (IsValid(refreshToken))
+        //    {
+        //        var newToken = GenerateJwtToken();
+        //        Response.Cookies.Append("auth-token", newToken, new CookieOptions
+        //        {
+        //            HttpOnly = true,
+        //            Secure = true,
+        //            SameSite = SameSiteMode.Lax,
+        //            Expires = DateTime.UtcNow.AddMinutes(15)
+        //        });
+
+        //        return Ok(new { message = "Token refreshed" });
+        //    }
+
+        //    return Unauthorized();
+        //}
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequest)
