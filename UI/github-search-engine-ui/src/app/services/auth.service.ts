@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -57,7 +57,44 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  checkSession(): Observable<any> {
+    return this.http
+      .get<any>(`${this.baseUrl}/session`, { withCredentials: true })
+      .pipe(
+        tap((response) => {
+          if (response.isAuthenticated) {
+            this.usernameSubject.next(response.username);
+          } else {
+            this.clearState();
+          }
+        }),
+        catchError(() => {
+          this.clearState();
+          return throwError(() => 'Session expired');
+        })
+      );
+  }
+
+  initializeAuth(): Promise<void> {
+    debugger;
+    return this.checkSession()
+      .toPromise()
+      .catch(() => {});
+  }
+
   isLoggedIn(): boolean {
     return this.usernameSubject.value !== null;
+  }
+
+  refreshToken(): Observable<any> {
+    return this.http
+      .post(`${this.baseUrl}/refresh-token`, {}, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Token refreshed')),
+        catchError(() => {
+          this.clearState();
+          return throwError(() => 'Failed to refresh token');
+        })
+      );
   }
 }
